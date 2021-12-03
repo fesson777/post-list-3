@@ -1,0 +1,28 @@
+{
+  "name": "js-blog-mini",
+  "version": "1.0.0",
+  "description": "js html css",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fesson777/post-list-3.git"
+  },
+  "keywords": [
+    "js",
+    "css"
+  ],
+  "author": "dmitriy matviichuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fesson777/post-list-3/issues"
+  },
+  "homepage": "https://github.com/fesson777/post-list-3#readme",
+  "devDependencies": {
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  }
+}
