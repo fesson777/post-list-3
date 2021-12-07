@@ -4,12 +4,6 @@ export class Form {
     this.controls = controls
   }
 
-  clear() {
-    Object.keys(this.controls).forEach((control) => {
-      this.form[control].value = ''
-    })
-  }
-
   value() {
     const value = {}
     Object.keys(this.controls).forEach((control) => {
@@ -37,11 +31,17 @@ export class Form {
 
     return isFormValid
   }
+
+  clear() {
+    Object.keys(this.controls).forEach((control) => {
+      this.form[control].value = ''
+    })
+  }
 }
 
 function setError($control_input) {
   clearError($control_input)
-  //   console.log($control) // показывает только невалидные поля
+  //   console.log($control_input) // показывает только невалидные поля
   const error = `<p class="validation-error">Введите корректное значение</p>`
 
   $control_input.classList.add('invalid')

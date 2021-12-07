@@ -6,11 +6,16 @@ export class Component {
 
   init() {}
 
+  onShow() {} //отслеживание включения закладки Posts
+  onHide() {}
+
   show() {
     this.$el.classList.remove('hide')
+    this.onShow()
   }
 
   hide() {
     this.$el.classList.add('hide')
+    this.onHide()
   }
 }

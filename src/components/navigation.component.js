@@ -1,7 +1,7 @@
 import { Component } from '../core/component'
 
 export class NavigationComponent extends Component {
-  constructor(id, arr) {
+  constructor(id) {
     super(id)
     this.tabs = []
   }
@@ -22,7 +22,7 @@ function navHandler(event) {
     event.target.classList.add('active')
 
     const activeTab = this.tabs.find(
-      (f) => f.name === event.target.dataset.name
+      (tab) => tab.name === event.target.dataset.name
     )
     this.tabs.forEach((tab) => tab.component.hide())
     activeTab.component.show()
