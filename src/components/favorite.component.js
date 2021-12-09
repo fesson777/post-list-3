@@ -23,11 +23,14 @@ export class FavoriteComponent extends Component {
 }
 
 function renderList(list = []) {
-  if (list.length) {
+  if (list.length && list) {
     return `
     <ul>
         ${list
-          .map((i) => `<li><a href="#" class="js-link">${i}</a></li>`)
+          .map(
+            (i) =>
+              `<li><a href="#" class="js-link" data-id="${i.idPost}">${i.titlePost}</a></li>`
+          )
           .join(' ')}
     </ul>
     `
@@ -38,16 +41,20 @@ function renderList(list = []) {
 
 async function linkHandler(event) {
   event.preventDefault()
+
   if (event.target.classList.contains('js-link')) {
-    const id = event.target.textContent
+    const id = event.target.dataset.id
     this.$el.innerHTML = ''
+
     this.loader.show()
+
     const post = await apiService.fetchPostById(id)
+
     this.loader.hide()
+
     this.$el.insertAdjacentHTML(
       'afterbegin',
       renderPost(post, { withButton: false })
     )
-    console.log(post)
   }
 }

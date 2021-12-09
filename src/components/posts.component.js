@@ -31,22 +31,24 @@ export class PostsComponent extends Component {
 
 function buttonHandler(event) {
   const $el = event.target
-  console.log($el)
   const idPost = event.target.dataset.id
+  const titlePost = event.target.dataset.title
+
   if (idPost) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || []
-    if (favorites.includes(idPost)) {
+    const candidate = favorites.find((p) => p.idPost === idPost)
+    if (candidate) {
       $el.textContent = 'Сохранить'
       $el.classList.add('button-primary')
       $el.classList.remove('button-warning')
 
-      favorites = favorites.filter((fID) => fID !== idPost)
+      favorites = favorites.filter((p) => p.idPost !== idPost)
     } else {
       $el.textContent = 'Удалить'
       $el.classList.remove('button-primary')
       $el.classList.add('button-warning')
 
-      favorites.push(idPost)
+      favorites.push({ idPost, titlePost })
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites))
