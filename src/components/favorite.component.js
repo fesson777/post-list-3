@@ -23,7 +23,7 @@ export class FavoriteComponent extends Component {
 }
 
 function renderList(list = []) {
-  if (list.length && list) {
+  if (list && list.length) {
     return `
     <ul>
         ${list

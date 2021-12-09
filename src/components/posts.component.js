@@ -16,11 +16,15 @@ export class PostsComponent extends Component {
     this.loader.show()
 
     const data = await apiService.fetchPosts() // запрос постов = обьект  с (ключ: обьект поста)
-    const posts = TransformService.transformDataToArrayFireBase(data) // адаптация в массив с id = key in FireBase
-    const html = posts.map((post) => renderPost(post, { withButton: true }))
+    if (data === null) {
+      this.loader.hide()
+      this.$el.insertAdjacentHTML('afterbegin', '<p>Записей нет!</p>')
+    }
+    const posts = TransformService.transformDataToArrayFireBase(data) || [] // адаптация в массив с id = key in FireBase
+    const html =
+      posts.map((post) => renderPost(post, { withButton: true })) || ''
 
     this.loader.hide()
-
     this.$el.insertAdjacentHTML('afterbegin', html.join(' '))
   }
 
@@ -33,6 +37,16 @@ function buttonHandler(event) {
   const $el = event.target
   const idPost = event.target.dataset.id
   const titlePost = event.target.dataset.title
+  const tPost = event.target.dataset.t
+  const del = event.target.dataset.del
+  if (del) {
+    apiService.delPostById(del)
+    alert(`Пост ${tPost} удалён`)
+    setTimeout(() => {
+      this.onHide()
+      this.show()
+    }, 2000)
+  }
 
   if (idPost) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || []

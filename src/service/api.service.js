@@ -44,6 +44,17 @@ class ApiService {
       console.error(error)
     }
   }
+  async delPostById(id) {
+    try {
+      const response = await fetch(`${this.url}/posts/${id}.json`, {
+        method: 'DELETE',
+      })
+
+      return await response.json()
+    } catch {
+      console.error(error)
+    }
+  }
 }
 
 export const apiService = new ApiService(baseUrl)

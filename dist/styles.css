@@ -63,3 +63,9 @@ textarea {
 .center {
   text-align: center;
 }
+.btn-del:hover {
+  background-color: black;
+
+  outline: none;
+  border-color: white;
+}
