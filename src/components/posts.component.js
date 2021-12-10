@@ -21,8 +21,14 @@ export class PostsComponent extends Component {
       this.$el.insertAdjacentHTML('afterbegin', '<p>Записей нет!</p>')
     }
     const posts = TransformService.transformDataToArrayFireBase(data) || [] // адаптация в массив с id = key in FireBase
+    const favorites = JSON.parse(localStorage.getItem('favorites'))
+    let state = []
+    if (favorites) {
+      state = favorites.map((obj) => obj.idPost)
+    }
+
     const html =
-      posts.map((post) => renderPost(post, { withButton: true })) || ''
+      posts.map((post) => renderPost(post, { withButton: true }, state)) || ''
 
     this.loader.hide()
     this.$el.insertAdjacentHTML('afterbegin', html.join(' '))
@@ -52,13 +58,13 @@ function buttonHandler(event) {
     let favorites = JSON.parse(localStorage.getItem('favorites')) || []
     const candidate = favorites.find((p) => p.idPost === idPost)
     if (candidate) {
-      $el.textContent = 'Сохранить'
+      $el.textContent = 'Добавить в избранное'
       $el.classList.add('button-primary')
       $el.classList.remove('button-warning')
 
       favorites = favorites.filter((p) => p.idPost !== idPost)
     } else {
-      $el.textContent = 'Удалить'
+      $el.textContent = 'Удалить из избранного'
       $el.classList.remove('button-primary')
       $el.classList.add('button-warning')
 
