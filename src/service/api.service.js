@@ -1,60 +1,43 @@
-const baseUrl =
-  'https://tags-3-dm-default-rtdb.europe-west1.firebasedatabase.app'
+import Axios from './axios';
+import { baseUrl } from './config';
 
-class ApiService {
-  constructor(baseUrl) {
-    this.url = baseUrl
-  }
+const axios = new Axios({ baseURL: baseUrl });
 
-  async createPost(post) {
+export class ApiService {
+  static async createPost(post) {
     try {
-      const request = new Request(`${this.url}/posts.json`, {
-        method: 'post',
-        body: JSON.stringify(post),
-      })
-
-      const response = await fetch(request)
-      return await response.json()
-    } catch {
-      console.error(error)
+      const response = await axios.post('/posts.json', post);
+      console.debug('ApiService ~ createPost ~ response.data', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('ApiService ~ createPost ~', error);
     }
   }
 
-  async fetchPosts() {
+  static async fetchPosts() {
     try {
-      const request = new Request(`${this.url}/posts.json`, {
-        method: 'get',
-      })
-
-      const response = await fetch(request)
-      return await response.json()
-    } catch {
-      console.error(error)
+      const response = await axios.get('/posts.json');
+      console.debug('ApiService ~ fetchPosts ~ response.data', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('ApiService ~ fetchPosts ~', error);
     }
   }
-  async fetchPostById(id) {
+  static async fetchPostById(id) {
     try {
-      const request = new Request(`${this.url}/posts/${id}.json`, {
-        method: 'get',
-      })
-
-      const response = await fetch(request)
-      return await response.json()
-    } catch {
-      console.error(error)
+      const response = await axios.get(`/posts/${id}.json`);
+      console.debug('ApiService ~ fetchPostById ~ response.data', response.data);
+      return response.data;
+    } catch (error) {
+      console.error(error);
     }
   }
-  async delPostById(id) {
+  static async delPostById(id) {
     try {
-      const response = await fetch(`${this.url}/posts/${id}.json`, {
-        method: 'DELETE',
-      })
-
-      return await response.json()
-    } catch {
-      console.error(error)
+      const response = await axios.delete(`/posts/${id}.json`);
+      console.debug('ApiService ~ delPostById ~ response', response);
+    } catch (error) {
+      console.error('ApiService ~ delPostById ~', error);
     }
   }
 }
-
-export const apiService = new ApiService(baseUrl)
