@@ -1,76 +1,75 @@
-import { Component } from '../core/component'
-import { apiService } from '../service/api.service'
-import { renderPost } from '../template/post.template'
-import { TransformService } from '../service/transform.apiserv'
+import { Component } from '../core/component';
+import { ApiService } from '../service/api.service';
+import { renderPost } from '../template/post.template';
+import { TransformService } from '../service/transform.apiserv';
 
 export class PostsComponent extends Component {
   constructor(id, { loader }) {
-    super(id)
-    this.loader = loader
+    super(id);
+    this.loader = loader;
   }
   init() {
-    this.$el.addEventListener('click', buttonHandler.bind(this))
+    this.$el.addEventListener('click', buttonHandler.bind(this));
   }
 
   async onShow() {
-    this.loader.show()
+    this.loader.show();
 
-    const data = await apiService.fetchPosts() // запрос постов = обьект  с (ключ: обьект поста)
+    const data = await ApiService.fetchPosts(); // запрос постов = обьект  с (ключ: обьект поста)
     if (data === null) {
-      this.loader.hide()
-      this.$el.insertAdjacentHTML('afterbegin', '<p>Записей нет!</p>')
+      this.loader.hide();
+      this.$el.insertAdjacentHTML('afterbegin', '<p>Записей нет!</p>');
     }
-    const posts = TransformService.transformDataToArrayFireBase(data) || [] // адаптация в массив с id = key in FireBase
-    const favorites = JSON.parse(localStorage.getItem('favorites'))
-    let state = []
+    const posts = TransformService.transformDataToArrayFireBase(data) || []; // адаптация в массив с id = key in FireBase
+    const favorites = JSON.parse(localStorage.getItem('favorites'));
+    let state = [];
     if (favorites) {
-      state = favorites.map((obj) => obj.idPost)
+      state = favorites.map(obj => obj.idPost);
     }
 
-    const html =
-      posts.map((post) => renderPost(post, { withButton: true }, state)) || ''
+    const html = posts.map(post => renderPost(post, { withButton: true }, state)) || '';
 
-    this.loader.hide()
-    this.$el.insertAdjacentHTML('afterbegin', html.join(' '))
+    this.loader.hide();
+    this.$el.insertAdjacentHTML('afterbegin', html.join(' '));
   }
 
   onHide() {
-    this.$el.innerHTML = ''
+    this.$el.innerHTML = '';
   }
 }
 
 function buttonHandler(event) {
-  const $el = event.target
-  const idPost = event.target.dataset.id
-  const titlePost = event.target.dataset.title
-  const tPost = event.target.dataset.t
-  const del = event.target.dataset.del
+  const $el = event.target;
+  const idPost = event.target.dataset.id;
+  const titlePost = event.target.dataset.title;
+  const tPost = event.target.dataset.t;
+  const del = event.target.dataset.del;
   if (del) {
-    apiService.delPostById(del)
-    alert(`Пост ${tPost} удалён`)
+    ApiService.delPostById(del);
+    alert(`Пост ${tPost} удалён`);
     setTimeout(() => {
-      this.onHide()
-      this.show()
-    }, 2000)
+      this.onHide();
+      this.show();
+    }, 2000);
   }
 
   if (idPost) {
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || []
-    const candidate = favorites.find((p) => p.idPost === idPost)
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const candidate = favorites.find(p => p.idPost === idPost);
     if (candidate) {
-      $el.textContent = 'Добавить в избранное'
-      $el.classList.add('button-primary')
-      $el.classList.remove('button-warning')
+      $el.textContent = 'Добавить в избранное';
+      $el.classList.add('button-primary');
+      $el.classList.remove('button-warning');
 
-      favorites = favorites.filter((p) => p.idPost !== idPost)
+      favorites = favorites.filter(p => p.idPost !== idPost);
     } else {
-      $el.textContent = 'Удалить из избранного'
-      $el.classList.remove('button-primary')
-      $el.classList.add('button-warning')
+      $el.textContent = 'Удалить из избранного';
+      $el.classList.remove('button-primary');
+      $el.classList.add('button-warning');
 
-      favorites.push({ idPost, titlePost })
+      favorites.push({ idPost, titlePost });
     }
 
-    localStorage.setItem('favorites', JSON.stringify(favorites))
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }
 }
